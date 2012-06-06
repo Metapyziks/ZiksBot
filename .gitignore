@@ -4,3 +4,5 @@
 *.suo
 *.manifest
 *obj/
+*.log
+*.csproj.user
