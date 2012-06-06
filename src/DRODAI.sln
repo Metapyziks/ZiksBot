@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{D42C9793-651D-41A7-A942-3C990F987D59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{EF4C13E6-2F4B-410B-8581-0AC783491672}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DumbBot", "Examples\DumbBot\DumbBot.csproj", "{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D42C9793-651D-41A7-A942-3C990F987D59}.Debug|x86.ActiveCfg = Debug|x86
+		{D42C9793-651D-41A7-A942-3C990F987D59}.Debug|x86.Build.0 = Debug|x86
+		{D42C9793-651D-41A7-A942-3C990F987D59}.Release|x86.ActiveCfg = Release|x86
+		{D42C9793-651D-41A7-A942-3C990F987D59}.Release|x86.Build.0 = Release|x86
+		{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}.Debug|x86.ActiveCfg = Debug|x86
+		{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}.Debug|x86.Build.0 = Debug|x86
+		{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}.Release|x86.ActiveCfg = Release|x86
+		{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE} = {EF4C13E6-2F4B-410B-8581-0AC783491672}
+	EndGlobalSection
+EndGlobal
