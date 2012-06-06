@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DumbBot
+namespace Game
 {
     static class GameState
     {
         public static int Timeout;
 
-        public static Random Random;
+        public static int Seed;
         public static bool FogOfWar;
 
         public static int Turn;
         public static int TurnLimit;
 
         public static Tile[ , ] Map;
-
-        public static List<Bot> MyBots;
-        public static List<Bot> EnemyBots;
 
         public static int MapWidth;
         public static int MapHeight;
@@ -28,7 +25,7 @@ namespace DumbBot
             Map = new Tile[ MapWidth, MapHeight ];
         }
 
-        public static bool IsWall( Vector loc )
+        public static bool IsWall( Position loc )
         {
             return Map[ loc.X, loc.Y ] == Tile.Wall;
         }

@@ -11,7 +11,6 @@ namespace DumbBot
         {
             None,   // Waiting for a phase type
             Setup,  // Receiving game properties
-            Map,    // Receiving map dimentions and layout
             Turn,   // Receiving turn state information
             Done,   // Game ended or bot has been eliminated
         }
@@ -41,8 +40,6 @@ namespace DumbBot
                             myPhase = GamePhase.None; break;
                         case "setup":
                             myPhase = GamePhase.Setup; break;
-                        case "map":
-                            myPhase = GamePhase.Map; break;
                         case "turn":
                             myPhase = GamePhase.Turn; break;
                         case "done":
@@ -71,6 +68,12 @@ namespace DumbBot
                                     break;
                                 case "fow":
                                     GameState.FogOfWar = bool.Parse( split[ 1 ] );
+                                    break;
+                                case "turns":
+                                    GameState.TurnLimit = int.Parse( split[ 1 ] );
+                                    break;
+                                case "timeout":
+                                    GameState.Timeout = int.Parse( split[ 1 ] );
                                     break;
                             }
                             break;

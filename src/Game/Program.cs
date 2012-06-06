@@ -11,11 +11,8 @@ namespace Game
     {
         static FileStream myLogStream;
         static StreamWriter myLogWriter;
+
         static int myTeamCount;
-
-        static int myMapWidth;
-        static int myMapHeight;
-
         static Team[] myTeams;
 
         static void Main( string[] args )
@@ -25,9 +22,14 @@ namespace Game
             if ( myTeamCount < 2 )
                 return;
 
+            GameState.Timeout = 1000;
+            GameState.TurnLimit = 500;
+            GameState.Seed = (int) DateTime.UtcNow.ToBinary();
+            GameState.FogOfWar = true;
+
             // Would load a map now, but using an empty one until then
-            myMapWidth = 32;
-            myMapHeight = 32;
+            GameState.MapWidth = 32;
+            GameState.MapHeight = 32;
 
             myLogStream = new FileStream( "game.log", FileMode.Create, FileAccess.Write );
             myLogWriter = new StreamWriter( myLogStream );
@@ -37,12 +39,26 @@ namespace Game
             for ( int i = 0; i < myTeamCount; ++i )
                 myTeams[ i ] = new Team( args[ i ] );
 
+            LogComment( "new game staring with properties:" );
+            LogComment( "  turns", GameState.TurnLimit );
+            LogComment( "   seed", GameState.Seed );
+            LogComment( "  width", GameState.MapWidth );
+            LogComment( " height", GameState.MapHeight );
+            LogComment( "    fow", GameState.FogOfWar );
+            LogComment( "timeout", GameState.Timeout );
+
             if ( StartPrograms() )
             {
                 SendSetup();
+
+                for ( GameState.Turn = 0; GameState.Turn < GameState.TurnLimit; ++ GameState.Turn )
+                {
+                    LogComment( "turn", GameState.Turn + 1 );
+                }
             }
 
             StopPrograms();
+            myLogWriter.Close();
             myLogStream.Close();
         }
 
@@ -68,21 +84,23 @@ namespace Game
 
         static void SendSetup()
         {
-            int seed = (int) DateTime.UtcNow.ToBinary();
-
             foreach ( Team team in myTeams )
             {
                 team.WriteLine( "setup" );
-                team.WriteLine( "seed", seed );
-                team.WriteLine( "width", myMapWidth );
-                team.WriteLine( "height", myMapHeight );
-                team.WriteLine( "fow", true );
+                team.WriteLine( "seed", GameState.Seed );
+                team.WriteLine( "width", GameState.MapWidth );
+                team.WriteLine( "height", GameState.MapHeight );
+                team.WriteLine( "fow", GameState.FogOfWar );
+                team.WriteLine( "turns", GameState.TurnLimit );
+                team.WriteLine( "timeout", GameState.Timeout );
                 team.WriteLine( "end" );
             }
         }
 
         static void StopPrograms()
         {
+            LogComment( "stopping ai programs" );
+
             for ( int i = 0; i < myTeamCount; ++i )
                 if ( myTeams[ i ] != null )
                     myTeams[ i ].StopProgram();
@@ -98,11 +116,23 @@ namespace Game
             }
 
             Console.WriteLine();
+            myLogWriter.WriteLine();
         }
 
         static void LogComment( params object[] values )
         {
-            Log( values );
+            Console.Write( "#" );
+            myLogWriter.Write( "#" );
+
+            for ( int i = 0; i < values.Length; ++i )
+            {
+                String val = " " + values[ i ].ToString();
+                Console.Write( val );
+                myLogWriter.Write( val );
+            }
+
+            Console.WriteLine();
+            myLogWriter.WriteLine();
         }
     }
 }
