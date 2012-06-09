@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Diagnostics;
 
 namespace Game
 {
@@ -158,6 +154,52 @@ namespace Game
                             }
                         }
 
+                        bool[ , ] packageGrid = new bool[ GameState.MapWidth, GameState.MapHeight ];
+
+                        foreach ( Position pos in GameState.Packages )
+                            packageGrid[ pos.X, pos.Y ] = true;
+
+                        for( int i = GameState.Packages.Count - 1; i >= 0; --i )
+                        {
+                            Position pos = GameState.Packages[ i ];
+                            Agent agent = agentGrid[ pos.X, pos.Y ];
+                            if ( agent != null )
+                            {
+                                GameState.Packages.RemoveAt( i );
+
+                                if ( !agent.Dead )
+                                {
+                                    Position newPos = pos + agent.Direction;
+
+                                    if ( GameState.Map[ newPos.X, newPos.Y ] == Tile.Empty &&
+                                        !packageGrid[ newPos.X, newPos.Y ] &&
+                                        agentGrid[ newPos.X, newPos.Y ] == null )
+                                    {
+                                        bool spawned = false;
+                                        foreach ( Team team in GameState.Teams )
+                                        {
+                                            foreach( Position bPos in team.Bases )
+                                            {
+                                                if ( bPos.Equals( newPos ) )
+                                                {
+                                                    spawned = true;
+                                                    team.Agents.Add( new Agent( team, newPos, agent.Direction ) );
+                                                    ++liveCount;
+                                                    Log( "a", team.ID, newPos.X, newPos.Y, agent.Direction );
+                                                    break;
+                                                }
+                                            }
+                                            if ( spawned )
+                                                break;
+                                        }
+
+                                        if( !spawned )
+                                            GameState.Packages.Add( newPos );
+                                    }
+                                }
+                            }
+                        }
+
                         if ( activeTeams > 1 && liveCount + GameState.Packages.Count + GameState.TeamCount <=
                             Math.Max( GameState.TeamCount * 2, ( GameState.MapWidth * GameState.MapHeight ) / 16 ) )
                         {
@@ -193,6 +235,9 @@ namespace Game
 
                                     if ( GameState.Map[ pos.X, pos.Y ] == Tile.Wall )
                                         break;
+
+                                    if ( agentGrid[ pos.X, pos.Y ] != null )
+                                        continue;
 
                                     placed = true;
                                     GameState.Packages.Add( pos );
