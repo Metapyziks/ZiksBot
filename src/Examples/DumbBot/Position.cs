@@ -10,6 +10,16 @@ namespace DumbBot
         public int X;
         public int Y;
 
+        public int LengthSquared
+        {
+            get { return X * X + Y * Y; }
+        }
+
+        public int LengthManhattan
+        {
+            get { return Math.Abs( X ) + Math.Abs( Y ); }
+        }
+
         public Position( int x, int y )
         {
             X = x;

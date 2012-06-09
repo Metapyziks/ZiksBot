@@ -18,6 +18,7 @@ namespace Game
 
         public static int Seed;
         public static bool FogOfWar;
+        public static float ViewRange;
 
         public static int Turn;
         public static int TurnLimit;
@@ -108,6 +109,7 @@ namespace Game
                             else
                                 Map[ x, y ] = Tile.Empty;
                         }
+                        ++y;
                     }
                 }
 

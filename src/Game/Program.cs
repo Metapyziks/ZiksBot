@@ -22,13 +22,15 @@ namespace Game
                 GameState.TurnLimit = 500;
                 GameState.Seed = (int) DateTime.UtcNow.ToBinary();
                 GameState.FogOfWar = true;
+                GameState.ViewRange = 5.0f;
 
                 LogComment( "new game staring with properties:" );
 
                 Log( "turns", GameState.TurnLimit );
                 Log( "seed", GameState.Seed );
-                Log( "fow", GameState.FogOfWar );
+                Log( "fow", GameState.FogOfWar.ToString().ToLower() );
                 Log( "timeout", GameState.Timeout );
+                Log( "vrange", GameState.ViewRange );
 
                 LogComment( "loading map" );
 

@@ -26,8 +26,13 @@ namespace DumbBot
 
         protected virtual void OnTakeTurn()
         {
-            foreach( Agent agent in Agents )
-                agent.Order = Order.MoveForward;
+            foreach ( Agent agent in Agents )
+            {
+                if ( agent.CanMove() )
+                    agent.Order = Order.MoveForward;
+                else
+                    agent.Order = Order.TurnRight;
+            }
         }
     }
 }

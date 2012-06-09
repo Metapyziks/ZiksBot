@@ -14,6 +14,8 @@ namespace Game
         public readonly int ID;
 
         private Process myProcess;
+        private bool[,] myKnown;
+        private bool[,] myVisible;
 
         public List<Position> Bases;
         public List<Agent> Agents;
@@ -35,6 +37,9 @@ namespace Game
             ID = id;
             Bases = new List<Position>();
             Agents = new List<Agent>();
+
+            myKnown = new bool[ GameState.MapWidth, GameState.MapHeight ];
+            myVisible = new bool[ GameState.MapWidth, GameState.MapHeight ];
         }
 
         public void StartProgram( String exePath )
@@ -65,29 +70,79 @@ namespace Game
             WriteLine( "seed", GameState.Seed );
             WriteLine( "width", GameState.MapWidth );
             WriteLine( "height", GameState.MapHeight );
-            WriteLine( "fow", GameState.FogOfWar );
+            WriteLine( "fow", GameState.FogOfWar.ToString().ToLower() );
+            if( GameState.FogOfWar )
+                WriteLine( "vrange", GameState.ViewRange );
             WriteLine( "turns", GameState.TurnLimit );
             WriteLine( "timeout", GameState.Timeout );
             WriteLine( "teams", GameState.TeamCount );
             WriteLine( "end" );
         }
 
+        private void FindVisibility()
+        {
+            for ( int x = 0; x < GameState.MapWidth; ++x )
+                for ( int y = 0; y < GameState.MapHeight; ++y )
+                    myVisible[ x, y ] = false;
+
+            foreach ( Agent agent in Agents )
+            {
+                int xmin = (int) Math.Floor( agent.Position.X - GameState.ViewRange );
+                int xmax = (int) Math.Ceiling( agent.Position.X + GameState.ViewRange );
+                int ymin = (int) Math.Floor( agent.Position.Y - GameState.ViewRange );
+                int ymax = (int) Math.Ceiling( agent.Position.Y + GameState.ViewRange );
+
+                float squared = GameState.ViewRange * GameState.ViewRange;
+
+                for ( int x = xmin; x <= xmax; ++x )
+                {
+                    for ( int y = ymin; y <= ymax; ++y )
+                    {
+                        Position pos = new Position( x, y ).Wrap();
+                        if ( agent.Position.BestVector( pos ).LengthSquared <= squared )
+                            myVisible[ pos.X, pos.Y ] = true;
+                    }
+                }
+            }
+        }
+
         public void SendGameState()
         {
+            FindVisibility();
+
             WriteLine( "turn" );
-            WriteLine( "t", GameState.Turn );
-            foreach ( Agent agent in GameState.Dead )
+
+            for ( int x = 0; x < GameState.MapWidth; ++x )
+            {
+                for ( int y = 0; y < GameState.MapHeight; ++y )
+                {
+                    if ( myVisible[ x, y ] && !myKnown[ x, y ] )
+                    {
+                        myKnown[ x, y ] = true;
+
+                        if( GameState.Map[ x, y ] == Tile.Wall )
+                            WriteLine( "w", x, y );
+                    }
+                }
+            }
+
+            WriteLine( "t", GameState.Turn + 1 );
+            foreach ( Agent agent in GameState.Dead.Where( x => x.Team == this ||
+                myVisible[ x.Position.X, x.Position.Y ] ) )
+            {
                 WriteLine( "d", ( agent.Team.ID - ID + GameState.TeamCount ) % GameState.TeamCount,
                     agent.Position.X, agent.Position.Y );
+            }
             foreach( Team team in GameState.Teams )
             {
                 int relID = ( team.ID - ID + GameState.TeamCount ) % GameState.TeamCount;
-                foreach ( Position pos in team.Bases )
+                foreach ( Position pos in team.Bases.Where( x => myVisible[ x.X, x.Y ] ) )
                     WriteLine( "b", relID, pos.X, pos.Y );
-                foreach ( Agent agent in team.Agents )
+                foreach ( Agent agent in team.Agents.Where( x => x.Team == this ||
+                        myVisible[ x.Position.X, x.Position.Y ] ) )
                     WriteLine( "a", relID, agent.Position.X, agent.Position.Y, agent.Direction );
             }
-            foreach ( Position pos in GameState.Packages )
+            foreach ( Position pos in GameState.Packages.Where( x => myVisible[ x.X, x.Y ] ) )
                 WriteLine( "p", pos.X, pos.Y );
             WriteLine( "end" );
         }

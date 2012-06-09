@@ -63,5 +63,11 @@ namespace DumbBot
 
             Order = Order.None;
         }
+
+        public bool CanMove()
+        {
+            Position nextPos = Position + Direction;
+            return GameState.Map[ nextPos.X, nextPos.Y ] != Tile.Wall;
+        }
     }
 }

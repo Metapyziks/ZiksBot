@@ -30,6 +30,24 @@ namespace DumbBot
             throw new FormatException( str + " cannot be parsed as a Direction" );
         }
 
+        public static bool TryParse( String str, out Direction dir )
+        {
+            switch ( str )
+            {
+                case "n":
+                    dir = North; return true;
+                case "s":
+                    dir = South; return true;
+                case "e":
+                    dir = East; return true;
+                case "w":
+                    dir = West; return true;
+            }
+
+            dir = Direction.None;
+            return false;
+        }
+
         public readonly int X;
         public readonly int Y;
 
