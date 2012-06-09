@@ -86,6 +86,9 @@ namespace DumbBot
                                     case "fow":
                                         GameState.FogOfWar = bool.Parse( split[ 1 ] );
                                         break;
+                                    case "vrange":
+                                        GameState.ViewRange = float.Parse( split[ 1 ] );
+                                        break;
                                     case "teams":
                                         GameState.TeamCount = int.Parse( split[ 1 ] );
                                         break;

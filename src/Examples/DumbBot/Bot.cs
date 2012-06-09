@@ -12,6 +12,7 @@ namespace DumbBot
             get { return GameState.Agents[ 0 ]; }
         }
 
+        // This doesn't need to be modified
         public void TakeTurn()
         {
             OnTakeTurn();
@@ -24,6 +25,7 @@ namespace DumbBot
                 agent.FinishTurn();
         }
 
+        // Add your logic here
         protected virtual void OnTakeTurn()
         {
             foreach ( Agent agent in Agents )

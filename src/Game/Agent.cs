@@ -14,6 +14,8 @@ namespace Game
 
         public Order Order { get; set; }
 
+        public bool Dead { get; set; }
+
         public Agent( Team team )
         {
             Team = team;

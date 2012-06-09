@@ -12,7 +12,9 @@ namespace DumbBot
         public static int TeamCount;
 
         public static Random Random;
+
         public static bool FogOfWar;
+        public static float ViewRange;
 
         public static int Turn;
         public static int TurnLimit;

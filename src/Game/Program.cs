@@ -69,35 +69,83 @@ namespace Game
                     foreach ( Team team in GameState.Teams )
                         team.SendSetup();
 
-                    for ( GameState.Turn = 0; GameState.Turn < GameState.TurnLimit; ++GameState.Turn )
+                    for ( GameState.Turn = 0; GameState.Turn <= GameState.TurnLimit; ++GameState.Turn )
                     {
-                        Log( "turn", GameState.Turn + 1 );
+                        Log( "turn", GameState.Turn );
 
-                        foreach ( Team team in GameState.Teams )
+                        if ( GameState.Turn > 0 )
                         {
-                            if ( !team.Eliminated )
+                            foreach ( Team team in GameState.Teams )
                             {
-                                team.SendGameState();
-                                team.TakeTurn();
-
-                                if ( team.Eliminated )
+                                if ( !team.Eliminated )
                                 {
-                                    Log( "# bot", team.ID, "eliminated" );
-                                    team.WriteLine( "done" );
+                                    team.SendGameState();
+                                    team.TakeTurn();
+
+                                    if ( team.Eliminated )
+                                    {
+                                        Log( "# bot", team.ID, "eliminated - timeout" );
+                                        team.WriteLine( "done" );
+                                    }
                                 }
                             }
                         }
 
+                        Agent[ , ] agentGrid = new Agent[ GameState.MapWidth, GameState.MapHeight ];
+
                         foreach ( Team team in GameState.Teams )
                         {
-                            if ( !team.Eliminated )
+                            foreach ( Agent agent in team.Agents )
                             {
-                                foreach ( Agent agent in team.Agents )
-                                {
+                                if ( !team.Eliminated )
                                     agent.FinishTurn();
+
+                                int x = agent.Position.X; int y = agent.Position.Y;
+
+                                if ( agentGrid[ x, y ] != null )
+                                {
+                                    agentGrid[ x, y ].Dead = agent.Dead = true;
+                                }
+                                else
+                                {
+                                    agentGrid[ x, y ] = agent;
                                 }
                             }
                         }
+
+                        foreach ( Team team in GameState.Teams )
+                        {
+                            foreach ( Agent agent in team.Agents )
+                            {
+                                Position stabPos = agent.Position + agent.Direction;
+                                Agent victim = agentGrid[ stabPos.X, stabPos.Y ];
+                                if ( victim != null && victim.Team != agent.Team )
+                                    victim.Dead = true;
+                            }
+                        }
+
+                        bool done = true;
+                        foreach ( Team team in GameState.Teams )
+                        {
+                            for ( int i = team.Agents.Count - 1; i >= 0; --i )
+                            {
+                                Agent agent = team.Agents[ i ];
+                                if ( agent.Dead )
+                                {
+                                    Program.Log( "d", agent.Team.ID, agent.Position.X, agent.Position.Y );
+                                    team.Agents.RemoveAt( i );
+                                    GameState.Dead.Add( agent );
+                                }
+                                else
+                                {
+                                    Program.Log( "a", agent.Team.ID, agent.Position.X, agent.Position.Y, agent.Direction );
+                                    done = false;
+                                }
+                            }
+                        }
+
+                        if ( done )
+                            break;
                     }
                 }
 
