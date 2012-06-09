@@ -2,6 +2,9 @@
 
 namespace DumbBot
 {
+    // Remember the map wraps horizontally and
+    // vertically. Call Wrap() to keep a position
+    // inside the map
     struct Position
     {
         public int X;

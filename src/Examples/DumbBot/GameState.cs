@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace DumbBot
 {
+    // Contains information about the map
+    // layout, object positions and general
+    // game properties
     static class GameState
     {
         public static int Timeout;
@@ -19,9 +22,11 @@ namespace DumbBot
 
         public static Tile[ , ] Map;
 
+        // These arrays have one entry per team
         public static List<Agent>[] Agents;
         public static List<Agent>[] Dead;
         public static List<Position>[] Bases;
+
         public static List<Position> Packages;
 
         public static int MapWidth;
@@ -46,28 +51,18 @@ namespace DumbBot
             Packages = new List<Position>();
         }
 
+        // Clear any object positions, ready to be
+        // told new locations by the server
         public static void PreTurn()
         {
-            foreach ( Agent agent in Agents[ 0 ] )
-                agent.Confirmed = false;
-
             for ( int i = 0; i < TeamCount; ++i )
             {
-                if ( i > 0 )
-                    Agents[ i ].Clear();
-
+                Agents[ i ].Clear();
                 Dead[ i ].Clear();
                 Bases[ i ].Clear();
             }
 
             Packages.Clear();
-        }
-
-        public static void TurnStart()
-        {
-            for ( int i = Agents[ 0 ].Count - 1; i >= 0; --i )
-                if ( !Agents[ 0 ][ i ].Confirmed )
-                    Agents[ 0 ].RemoveAt( i );
         }
 
         public static bool IsWall( Position loc )

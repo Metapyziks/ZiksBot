@@ -4,16 +4,13 @@ namespace DumbBot
 {
     class Agent
     {
-        internal bool Confirmed;
-
+        // If Team is 0, this agent is yours
         public readonly int Team;
-
-        public bool Friendly { get { return Team == 0; } }
-        public bool Enemy { get { return Team != 0; } }
 
         public Direction Direction { get; private set; }
         public Position Position { get; private set; }
 
+        // Set this during your turn to make an order
         public Order Order { get; set; }
 
         public Agent( int team )
@@ -28,6 +25,7 @@ namespace DumbBot
             Direction = dir;
         }
 
+        // Sends this agent's order to the server
         public void CommitMove()
         {
             if ( Order != Order.None )

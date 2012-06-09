@@ -2,6 +2,8 @@
 
 namespace DumbBot
 {
+    // Class containing program entry point
+    // Handles communicating with the game server
     class Program
     {
         enum GamePhase
@@ -28,6 +30,8 @@ namespace DumbBot
                 if ( line.Length == 0 || line[ 0 ] == '#' )
                     continue;
 
+                // If we are not currently in an input group
+                // then expect to be given a group name
                 if( myPhase == GamePhase.None )
                 {
                     switch ( line )
@@ -48,6 +52,7 @@ namespace DumbBot
                 }
                 else
                 {
+                    // Check if current group has ended
                     if ( line == "end" )
                     {
                         switch ( myPhase )
@@ -68,90 +73,66 @@ namespace DumbBot
 
                         switch ( myPhase )
                         {
-                            case GamePhase.Setup:
+                            case GamePhase.Setup: // Parse setup commands
                                 switch ( split[ 0 ] )
                                 {
-                                    case "width":
+                                    case "width": // Width of map
                                         GameState.MapWidth = int.Parse( split[ 1 ] );
                                         break;
-                                    case "height":
+                                    case "height": // Height of map
                                         GameState.MapHeight = int.Parse( split[ 1 ] );
                                         break;
-                                    case "seed":
+                                    case "seed": // Seed for random number generation
                                         GameState.Random = new Random( int.Parse( split[ 1 ] ) );
                                         break;
-                                    case "fow":
+                                    case "fow": // Fog of war boolean
                                         GameState.FogOfWar = bool.Parse( split[ 1 ] );
                                         break;
-                                    case "vrange":
+                                    case "vrange": // Agent view range
                                         GameState.ViewRange = float.Parse( split[ 1 ] );
                                         break;
-                                    case "teams":
+                                    case "teams": // Number of teams
                                         GameState.TeamCount = int.Parse( split[ 1 ] );
                                         break;
-                                    case "turns":
+                                    case "turns": // Turn limit
                                         GameState.TurnLimit = int.Parse( split[ 1 ] );
                                         break;
-                                    case "timeout":
+                                    case "timeout": // Timeout time in ms
                                         GameState.Timeout = int.Parse( split[ 1 ] );
                                         break;
                                 }
                                 break;
-                            case GamePhase.Turn:
+                            case GamePhase.Turn: // Parse turn commands
                                 int team;
-                                bool found;
                                 Position pos;
                                 Direction dir;
                                 switch ( split[ 0 ] )
                                 {
-                                    case "t":
+                                    case "t": // Turn number
                                         GameState.Turn = int.Parse( split[ 1 ] );
                                         break;
-                                    case "a":
+                                    case "a": // Agent position and rotation
                                         team = int.Parse( split[ 1 ] );
                                         pos = new Position( int.Parse( split[ 2 ] ), int.Parse( split[ 3 ] ) );
                                         dir = Direction.Parse( split[ 4 ] );
-                                        if ( team == 0 )
-                                        {
-                                            found = false;
-                                            foreach ( Agent agent in GameState.Agents[ 0 ] )
-                                            {
-                                                if ( agent.Position.Equals( pos ) )
-                                                {
-                                                    found = true;
-                                                    if ( !agent.Confirmed )
-                                                        agent.Confirmed = true;
-                                                    else
-                                                        throw new Exception( "Duplicate agent detected" );
-
-                                                    break;
-                                                }
-                                            }
-
-                                            if ( !found )
-                                                GameState.Agents[ 0 ].Add( new Agent( team, pos, dir ) );
-                                        }
-                                        else
-                                        {
-                                            GameState.Agents[ team ].Add( new Agent( team, pos, dir ) );
-                                        }
+                                        GameState.Agents[ team ].Add( new Agent( team, pos, dir ) );
                                         break;
-                                    case "d":
+                                    case "d": // Dead agent position and rotation
                                         team = int.Parse( split[ 1 ] );
                                         pos = new Position( int.Parse( split[ 2 ] ), int.Parse( split[ 3 ] ) );
                                         dir = Direction.Parse( split[ 4 ] );
                                         GameState.Dead[ team ].Add( new Agent( team, pos, dir ) );
                                         break;
-                                    case "b":
+                                    case "b": // Base position
                                         team = int.Parse( split[ 1 ] );
                                         pos = new Position( int.Parse( split[ 2 ] ), int.Parse( split[ 3 ] ) );
                                         GameState.Bases[ team ].Add( pos );
                                         break;
-                                    case "p":
+                                    case "p": // Energy package position
                                         pos = new Position( int.Parse( split[ 1 ] ), int.Parse( split[ 2 ] ) );
                                         GameState.Packages.Add( pos );
                                         break;
-                                    case "w":
+                                    case "w": // Wall position
                                         pos = new Position( int.Parse( split[ 1 ] ), int.Parse( split[ 2 ] ) );
                                         GameState.Map[ pos.X, pos.Y ] = Tile.Wall;
                                         break;

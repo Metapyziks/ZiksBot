@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace DumbBot
 {
+    // Use this class, or a class that extends it, to
+    // hold the bulk of your AI procedures
     class Bot
     {
         public IEnumerable<Agent> Agents
@@ -28,8 +30,10 @@ namespace DumbBot
         {
             foreach ( Agent agent in Agents )
             {
+                // If agent can move forward, do so
                 if ( agent.CanMove() )
                     agent.Order = Order.MoveForward;
+                // Otherwise, turn right
                 else
                     agent.Order = Order.TurnRight;
             }
