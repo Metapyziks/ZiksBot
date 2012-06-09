@@ -9,6 +9,12 @@ namespace Game
     {
         public static int Timeout;
 
+        public static int TeamCount;
+        public static Team[] Teams;
+
+        public static List<Position> Packages;
+        public static List<Agent> Dead;
+
         public static int Seed;
         public static bool FogOfWar;
 
@@ -20,9 +26,11 @@ namespace Game
         public static int MapWidth;
         public static int MapHeight;
 
-        public static void ResetMap()
+        public static void PostSetup()
         {
             Map = new Tile[ MapWidth, MapHeight ];
+            Dead = new List<Agent>();
+            Packages = new List<Position>();
         }
 
         public static bool IsWall( Position loc )

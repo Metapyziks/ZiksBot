@@ -5,30 +5,30 @@ using System.Text;
 
 namespace DumbBot
 {
-    struct Vector
+    struct Position
     {
         public int X;
         public int Y;
 
-        public Vector( int x, int y )
+        public Position( int x, int y )
         {
             X = x;
             Y = y;
         }
 
-        public static Vector operator +( Vector a, Vector b )
+        public static Position operator +( Position a, Position b )
         {
-            return new Vector( a.X + b.X, a.Y + b.Y );
+            return new Position( a.X + b.X, a.Y + b.Y );
         }
 
-        public static Vector operator -( Vector a, Vector b )
+        public static Position operator -( Position a, Position b )
         {
-            return new Vector( a.X - b.X, a.Y - b.Y );
+            return new Position( a.X - b.X, a.Y - b.Y );
         }
 
-        public Vector BestVector( Vector pos )
+        public Position BestVector( Position pos )
         {
-            Vector dist = pos.Wrap() - this.Wrap();
+            Position dist = pos.Wrap() - this.Wrap();
 
             if ( dist.X >= GameState.MapWidth >> 1 )
                 dist.X -= GameState.MapWidth;
@@ -43,12 +43,28 @@ namespace DumbBot
             return dist;
         }
 
-        public Vector Wrap()
+        public Position Wrap()
         {
-            return new Vector(
+            return new Position(
                 X - (int) Math.Floor( (double) X / GameState.MapWidth ) * GameState.MapWidth,
                 Y - (int) Math.Floor( (double) Y / GameState.MapHeight ) * GameState.MapHeight
             );
+        }
+
+        public override bool Equals( object obj )
+        {
+            if ( obj is Position )
+            {
+                Position pos = (Position) obj;
+                return pos.X == X && pos.Y == Y;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return X ^ Y;
         }
     }
 }

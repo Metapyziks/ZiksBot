@@ -50,5 +50,21 @@ namespace Game
                 Y - (int) Math.Floor( (double) Y / GameState.MapHeight ) * GameState.MapHeight
             );
         }
+
+        public override bool Equals( object obj )
+        {
+            if ( obj is Position )
+            {
+                Position pos = (Position) obj;
+                return pos.X == X && pos.Y == Y;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return X ^ Y;
+        }
     }
 }

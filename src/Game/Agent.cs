@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Game
 {
-    class Bot
+    class Agent
     {
         public readonly Team Team;
 
@@ -14,9 +14,16 @@ namespace Game
 
         public Order Order { get; set; }
 
-        public Bot( Team team )
+        public Agent( Team team )
         {
             Team = team;
+        }
+
+        public Agent( Team team, Position pos, Direction dir )
+            : this( team )
+        {
+            Position = pos;
+            Direction = dir;
         }
 
         public void FinishTurn()

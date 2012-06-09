@@ -7,52 +7,27 @@ namespace DumbBot
 {
     class Bot
     {
-        public readonly int Team;
-
-        public bool Friendly { get { return Team == 0; } }
-        public bool Enemy { get { return Team != 0; } }
-
-        public Direction Direction { get; private set; }
-        public Vector Position { get; private set; }
-
-        public Order Order { get; set; }
-
-        public Bot( int team )
+        public IEnumerable<Agent> Agents
         {
-            Team = team;
+            get { return GameState.Agents[ 0 ]; }
         }
 
-        public void CommitMove()
+        public void TakeTurn()
         {
-            if ( Order != Order.None )
-            {
-                Console.Write( "o {0} {1} ", Position.X, Position.Y );
+            OnTakeTurn();
 
-                switch ( Order )
-                {
-                    case Order.MoveForward:
-                        Console.WriteLine( "f" ); break;
-                    case Order.TurnLeft:
-                        Console.WriteLine( "l" ); break;
-                    case Order.TurnRight:
-                        Console.WriteLine( "r" ); break;
-                }
-            }
+            foreach ( Agent agent in GameState.Agents[ 0 ] )
+                agent.CommitMove();
+            Console.WriteLine( "go" );
+
+            foreach ( Agent agent in GameState.Agents[ 0 ] )
+                agent.FinishTurn();
         }
 
-        public void FinishTurn()
+        protected virtual void OnTakeTurn()
         {
-            switch ( Order )
-            {
-                case Order.MoveForward:
-                    Position += Direction; break;
-                case Order.TurnLeft:
-                    Direction = Direction.Left; break;
-                case Order.TurnRight:
-                    Direction = Direction.Right; break;
-            }
-
-            Order = Order.None;
+            foreach( Agent agent in Agents )
+                agent.Order = Order.MoveForward;
         }
     }
 }

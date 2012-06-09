@@ -8,9 +8,6 @@ namespace DumbBot
     enum Tile
     {
         Empty = 0,
-        Bot,
-        Food,
-        Base,
         Wall
     }
 }
