@@ -11,6 +11,7 @@ namespace DumbBot
         public static readonly Direction East  = new Direction( 1, 0 );
         public static readonly Direction South = new Direction( 0, 1 );
         public static readonly Direction West  = new Direction( -1, 0 );
+        public static readonly Direction None  = new Direction( 0, 0 );
 
         public static Direction Parse( String str )
         {

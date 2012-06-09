@@ -12,7 +12,6 @@ namespace Game
     class Team
     {
         public readonly int ID;
-        public readonly String ExePath;
 
         private Process myProcess;
 
@@ -31,20 +30,19 @@ namespace Game
             get { return /*!myProcess.StandardError.EndOfStream*/ false; }
         }
 
-        public Team( int id, String exePath )
+        public Team( int id )
         {
             ID = id;
-            ExePath = exePath;
             Bases = new List<Position>();
             Agents = new List<Agent>();
         }
 
-        public void StartProgram()
+        public void StartProgram( String exePath )
         {
             Eliminated = true;
-            if ( File.Exists( ExePath ) )
+            if ( File.Exists( exePath ) )
             {
-                ProcessStartInfo info = new ProcessStartInfo( ExePath );
+                ProcessStartInfo info = new ProcessStartInfo( exePath );
                 info.CreateNoWindow = true;
                 info.UseShellExecute = false;
                 info.RedirectStandardInput = true;
@@ -57,7 +55,7 @@ namespace Game
             }
             else
             {
-                throw new FileNotFoundException( "Executable not found at " + ExePath );
+                throw new FileNotFoundException( "Executable not found at " + exePath );
             }
         }
 

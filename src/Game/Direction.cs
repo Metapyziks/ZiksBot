@@ -11,6 +11,7 @@ namespace Game
         public static readonly Direction East  = new Direction( 1, 0 );
         public static readonly Direction South = new Direction( 0, 1 );
         public static readonly Direction West  = new Direction( -1, 0 );
+        public static readonly Direction None  = new Direction( 0, 0 );
 
         public static Direction Parse( String str )
         {
@@ -27,6 +28,24 @@ namespace Game
             }
 
             throw new FormatException( str + " cannot be parsed as a Direction" );
+        }
+
+        public static bool TryParse( String str, out Direction dir )
+        {
+            switch ( str )
+            {
+                case "n":
+                    dir = North; return true;
+                case "s":
+                    dir = South; return true;
+                case "e":
+                    dir = East; return true;
+                case "w":
+                    dir = West; return true;
+            }
+
+            dir = Direction.None;
+            return false;
         }
 
         public readonly int X;
