@@ -21,6 +21,7 @@ namespace Game
                 GameState.Timeout = 1000;
                 GameState.TurnLimit = 500;
                 GameState.Seed = (int) DateTime.UtcNow.ToBinary();
+                GameState.Random = new Random( GameState.Seed );
                 GameState.FogOfWar = true;
                 GameState.ViewRange = 5.0f;
 
@@ -124,7 +125,8 @@ namespace Game
                             }
                         }
 
-                        bool done = true;
+                        int liveCount = 0;
+                        int activeTeams = 0;
                         foreach ( Team team in GameState.Teams )
                         {
                             for ( int i = team.Agents.Count - 1; i >= 0; --i )
@@ -132,19 +134,79 @@ namespace Game
                                 Agent agent = team.Agents[ i ];
                                 if ( agent.Dead )
                                 {
-                                    Program.Log( "d", agent.Team.ID, agent.Position.X, agent.Position.Y );
+                                    Log( "d", agent.Team.ID, agent.Position.X, agent.Position.Y );
                                     team.Agents.RemoveAt( i );
                                     GameState.Dead.Add( agent );
                                 }
                                 else
                                 {
-                                    Program.Log( "a", agent.Team.ID, agent.Position.X, agent.Position.Y, agent.Direction );
-                                    done = false;
+                                    ++liveCount;
+                                    Log( "a", agent.Team.ID, agent.Position.X, agent.Position.Y, agent.Direction );
                                 }
+                            }
+
+                            if ( !team.Eliminated )
+                            {
+                                if ( team.Agents.Count == 0 )
+                                {
+                                    team.Eliminated = true;
+                                    Log( "# bot", team.ID, "eliminated - defeated" );
+                                    team.WriteLine( "done" );
+                                }
+                                else
+                                    ++ activeTeams;
                             }
                         }
 
-                        if ( done )
+                        if ( activeTeams > 1 && liveCount + GameState.Packages.Count + GameState.TeamCount <=
+                            Math.Max( GameState.TeamCount * 2, ( GameState.MapWidth * GameState.MapHeight ) / 16 ) )
+                        {
+                            int tries = 0;
+                            while ( tries++ < 256 )
+                            {
+                                Position offset = new Position(
+                                    GameState.Random.Next( GameState.MapWidth ),
+                                    GameState.Random.Next( GameState.MapHeight )
+                                );
+
+                                bool placed = false;
+                                foreach ( Team team in GameState.Teams )
+                                {
+                                    Position pos = ( team.InitialBasePos + offset * team.InitialBaseDir ).Wrap();
+                                    bool validPos = true;
+
+                                    foreach ( Team t in GameState.Teams )
+                                    {
+                                        foreach ( Position b in t.Bases )
+                                        {
+                                            if ( b.BestVector( pos ).LengthManhattan < 2 )
+                                            {
+                                                validPos = false;
+                                                break;
+                                            }
+                                        }
+                                        if ( !validPos )
+                                            break;
+                                    }
+                                    if ( !validPos )
+                                        break;
+
+                                    if ( GameState.Map[ pos.X, pos.Y ] == Tile.Wall )
+                                        break;
+
+                                    placed = true;
+                                    GameState.Packages.Add( pos );
+                                }
+
+                                if ( placed )
+                                    break;
+                            }
+                        }
+
+                        foreach ( Position pos in GameState.Packages )
+                            Log( "p", pos.X, pos.Y );
+
+                        if ( activeTeams <= 1 )
                             break;
                     }
                 }

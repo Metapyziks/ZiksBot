@@ -83,6 +83,20 @@ namespace DumbBot
             return new Position( vec.X - dir.X, vec.Y - dir.Y ).Wrap();
         }
 
+        public static Position operator *( Position vec, Direction dir )
+        {
+            if ( dir.Equals( North ) )
+                return vec;
+            if ( dir.Equals( East ) )
+                return new Position( -vec.Y, vec.X );
+            if ( dir.Equals( South ) )
+                return new Position( -vec.X, -vec.Y );
+            if ( dir.Equals( West ) )
+                return new Position( vec.Y, -vec.X );
+
+            return new Position();
+        }
+
         public override string ToString()
         {
             if ( X == -1 )

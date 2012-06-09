@@ -17,6 +17,9 @@ namespace Game
         private bool[,] myKnown;
         private bool[,] myVisible;
 
+        public Position InitialBasePos;
+        public Direction InitialBaseDir;
+
         public List<Position> Bases;
         public List<Agent> Agents;
 

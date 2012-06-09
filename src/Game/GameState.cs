@@ -17,6 +17,8 @@ namespace Game
         public static List<Agent> Dead;
 
         public static int Seed;
+        public static Random Random;
+
         public static bool FogOfWar;
         public static float ViewRange;
 
@@ -95,16 +97,23 @@ namespace Game
                                 Map[ x, y ] = Tile.Wall;
                             else if( char.IsNumber( c ) )
                             {
-                                int team;
-                                if ( !int.TryParse( c.ToString(), out team ) || team >= TeamCount )
+                                int teamNo;
+                                if ( !int.TryParse( c.ToString(), out teamNo ) || teamNo >= TeamCount )
                                     return false;
+
+                                Team team = Teams[ teamNo ];
 
                                 Direction dir;
                                 if ( !Direction.TryParse( line[ ( x << 1 ) + 1 ].ToString(), out dir ) )
                                     return false;
 
-                                Teams[ team ].Bases.Add( new Position( x, y ) );
-                                Teams[ team ].Agents.Add( new Agent( Teams[ team ], new Position( x, y ), dir ) );
+                                Position pos = new Position( x, y );
+
+                                team.Bases.Add( pos );
+                                team.Agents.Add( new Agent( team, pos, dir ) );
+
+                                team.InitialBasePos = pos;
+                                team.InitialBaseDir = dir;
                             }
                             else
                                 Map[ x, y ] = Tile.Empty;
