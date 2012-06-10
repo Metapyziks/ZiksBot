@@ -150,7 +150,7 @@ namespace Game
 
         public void TakeTurn()
         {
-            Program.Log( "bot", ID );
+            Program.Log( "team", ID );
 
             Stopwatch timer = new Stopwatch();
             timer.Start();
