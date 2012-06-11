@@ -2,7 +2,10 @@
 {
     class Agent
     {
+        private static int stNextID = 0;
+
         public readonly Team Team;
+        public readonly int ID;
 
         public Direction Direction { get; private set; }
         public Position Position { get; private set; }
@@ -14,6 +17,7 @@
         public Agent( Team team )
         {
             Team = team;
+            ID = stNextID++;
         }
 
         public Agent( Team team, Position pos, Direction dir )

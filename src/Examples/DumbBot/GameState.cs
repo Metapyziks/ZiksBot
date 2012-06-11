@@ -59,8 +59,14 @@ namespace DumbBot
             {
                 Agents[ i ].Clear();
                 Dead[ i ].Clear();
-                Bases[ i ].Clear();
             }
+
+            // Bases and walls are only sent when first
+            // seen, so no need to clear them
+
+            // An improvement would be to keep track
+            // of your agents and not clear them every
+            // turn
 
             Packages.Clear();
         }

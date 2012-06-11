@@ -81,7 +81,7 @@ namespace Game
 
                                     if ( team.Eliminated )
                                     {
-                                        Log( "# bot", team.ID, "eliminated - timeout" );
+                                        Log( "# team", team.ID, "eliminated - timeout" );
                                         team.WriteLine( "done" );
                                     }
                                 }
@@ -130,14 +130,14 @@ namespace Game
                                 Agent agent = team.Agents[ i ];
                                 if ( agent.Dead )
                                 {
-                                    Log( "d", agent.Team.ID, agent.Position.X, agent.Position.Y );
+                                    Log( "d", agent.ID, agent.Team.ID, agent.Position.X, agent.Position.Y, agent.Direction );
                                     team.Agents.RemoveAt( i );
                                     GameState.Dead.Add( agent );
                                 }
                                 else
                                 {
                                     ++liveCount;
-                                    Log( "a", agent.Team.ID, agent.Position.X, agent.Position.Y, agent.Direction );
+                                    Log( "a", agent.ID, agent.Team.ID, agent.Position.X, agent.Position.Y, agent.Direction );
                                 }
                             }
 
@@ -183,9 +183,10 @@ namespace Game
                                                 if ( bPos.Equals( newPos ) )
                                                 {
                                                     spawned = true;
-                                                    team.Agents.Add( new Agent( team, newPos, agent.Direction ) );
+                                                    Agent newAgent = new Agent( team, newPos, agent.Direction );
+                                                    team.Agents.Add( newAgent );
                                                     ++liveCount;
-                                                    Log( "a", team.ID, newPos.X, newPos.Y, agent.Direction );
+                                                    Log( "a", newAgent.ID, team.ID, newPos.X, newPos.Y, agent.Direction );
                                                     break;
                                                 }
                                             }

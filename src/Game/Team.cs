@@ -113,6 +113,13 @@ namespace Game
 
             WriteLine( "turn" );
 
+            foreach ( Team team in GameState.Teams )
+            {
+                int relID = ( team.ID - ID + GameState.TeamCount ) % GameState.TeamCount;
+                foreach ( Position pos in team.Bases.Where( x => myVisible[ x.X, x.Y ] && !myKnown[ x.X, x.Y ] ) )
+                    WriteLine( "b", relID, pos.X, pos.Y );
+            }
+
             for ( int x = 0; x < GameState.MapWidth; ++x )
             {
                 for ( int y = 0; y < GameState.MapHeight; ++y )
@@ -137,8 +144,6 @@ namespace Game
             foreach( Team team in GameState.Teams )
             {
                 int relID = ( team.ID - ID + GameState.TeamCount ) % GameState.TeamCount;
-                foreach ( Position pos in team.Bases.Where( x => myVisible[ x.X, x.Y ] ) )
-                    WriteLine( "b", relID, pos.X, pos.Y );
                 foreach ( Agent agent in team.Agents.Where( x => x.Team == this ||
                         myVisible[ x.Position.X, x.Position.Y ] ) )
                     WriteLine( "a", relID, agent.Position.X, agent.Position.Y, agent.Direction );
@@ -174,10 +179,11 @@ namespace Game
 
                 String line = ReadLine().Trim().ToLower();
 
-                Program.Log( line );
-
                 if ( line == "go" )
+                {
+                    Program.Log( "go" );
                     break;
+                }
 
                 String[] split = line.Split( new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries );
 
@@ -212,11 +218,17 @@ namespace Game
                 switch ( order )
                 {
                     case "f":
-                        agent.Order = Order.MoveForward; break;
+                        agent.Order = Order.MoveForward;
+                        Program.Log( string.Format( "o {0} {1} {2}", agent.ID, agent.Team.ID, order ) );
+                    break;
                     case "l":
-                        agent.Order = Order.TurnLeft; break;
+                        agent.Order = Order.TurnLeft;
+                        Program.Log( string.Format( "o {0} {1} {2}", agent.ID, agent.Team.ID, order ) );
+                        break;
                     case "r":
-                        agent.Order = Order.TurnRight; break;
+                        agent.Order = Order.TurnRight;
+                        Program.Log( string.Format( "o {0} {1} {2}", agent.ID, agent.Team.ID, order ) );
+                        break;
                     default:
                         Eliminated = true; break;
                 }
