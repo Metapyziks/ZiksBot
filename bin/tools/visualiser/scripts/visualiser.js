@@ -3,13 +3,23 @@ function Visualiser()
 	this.canvas = null;
 	this.context = null;
 
+	images.load( "tile.png" );
+	images.load( "wall.png" );
+
 	this.mouseX = 0;
 	this.mouseY = 0;
+	
+	this.viewWidth = 512;
+	this.viewHeight = 384;
 
+	this.gameState = new GameState();
+	
 	this.initialize = function()
 	{
 		this.canvas = document.getElementById( "canvas" );
 		this.context = this.canvas.getContext( "2d" );
+		
+		this.gameState.parse( gameLog );
 		
 		this.onResizeCanvas();
 	}
@@ -58,6 +68,12 @@ function Visualiser()
 	{
 		this.context.fillStyle = "#141414";
 		this.context.fillRect( 0, 0, this.canvas.width, this.canvas.height );
+		
+		this.gameState.render( this.context,
+			0.5 * ( this.canvas.width - this.viewWidth ),
+			0.5 * ( this.canvas.height - this.viewHeight ),
+			this.viewWidth, this.viewHeight, 8, 8
+		);
 	}
 
 	this.run = function()
@@ -67,7 +83,6 @@ function Visualiser()
 
 	this.mainLoop = function( self )
 	{
-	
 		self.render();
 	}
 }

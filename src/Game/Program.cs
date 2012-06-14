@@ -277,7 +277,7 @@ namespace Game
             }
 
             Console.WriteLine();
-            myLogWriter.WriteLine();
+            myLogWriter.Write( ";" );
         }
 
         public static void LogComment( params object[] values )
@@ -293,7 +293,7 @@ namespace Game
             }
 
             Console.WriteLine();
-            myLogWriter.WriteLine();
+            myLogWriter.Write( ";" );
         }
     }
 }
