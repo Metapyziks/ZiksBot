@@ -7,10 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{EF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DumbBot", "Examples\DumbBot\DumbBot.csproj", "{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{8BD0BD63-E210-44CC-98F8-FB45DFA5F11D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visualiser", "Tools\Visualiser\Visualiser.csproj", "{B776860C-97B9-4ED0-A0D3-5B935E19D51E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -25,16 +21,11 @@ Global
 		{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}.Debug|x86.Build.0 = Debug|x86
 		{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}.Release|x86.ActiveCfg = Release|x86
 		{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}.Release|x86.Build.0 = Release|x86
-		{B776860C-97B9-4ED0-A0D3-5B935E19D51E}.Debug|x86.ActiveCfg = Debug|x86
-		{B776860C-97B9-4ED0-A0D3-5B935E19D51E}.Debug|x86.Build.0 = Debug|x86
-		{B776860C-97B9-4ED0-A0D3-5B935E19D51E}.Release|x86.ActiveCfg = Release|x86
-		{B776860C-97B9-4ED0-A0D3-5B935E19D51E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE} = {EF4C13E6-2F4B-410B-8581-0AC783491672}
-		{B776860C-97B9-4ED0-A0D3-5B935E19D51E} = {8BD0BD63-E210-44CC-98F8-FB45DFA5F11D}
 	EndGlobalSection
 EndGlobal
