@@ -1,0 +1,35 @@
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>AI Challenge - Game log visualiser</title>
+		<style type="text/css">
+			html, body
+			{
+				margin: 0px;
+				width: 	100%;
+				height: 100%;
+			}
+			#canvas
+			{
+				height: 100%;
+				width: 100%;
+				display:block;
+			}
+		</style>
+		<script type="text/javascript" >
+			var gameLog = "# new game staring with properties:;turns 500;seed 1651188593;fow true;timeout 1000;vrange 5;# loading map;teams 2;width 16;height 16;map;########......####......########;##..............##............##;##..1e..........##........0s..##;##..............##............##;..........##....##..............;..........##....########........;..........##....................;############..................##;##..................############;....................##..........;........########....##..........;..............##....##..........;##............##..............##;##..0n........##..........1w..##;##............##..............##;########......####......########;end;# starting ai programs;turn 0;a 2 0 2 13 n;a 1 0 13 2 s;a 3 1 13 13 w;a 0 1 2 2 e;p 5 15;p 15 10;turn 1;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;a 2 0 2 12 n;a 1 0 13 3 s;a 3 1 12 13 w;a 0 1 3 2 e;p 5 15;p 15 10;p 6 9;p 9 9;turn 2;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;a 2 0 2 11 n;a 1 0 13 4 s;a 3 1 11 13 w;a 0 1 4 2 e;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;turn 3;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;a 2 0 2 10 n;a 1 0 13 5 s;a 3 1 10 13 w;a 0 1 5 2 e;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;p 9 2;p 2 6;turn 4;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;a 2 0 2 9 n;a 1 0 13 6 s;a 3 1 9 13 w;a 0 1 6 2 e;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;p 9 2;p 2 6;p 4 8;p 8 11;turn 5;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;a 2 0 2 8 n;a 1 0 13 7 s;a 3 1 8 13 w;a 0 1 7 2 e;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;p 9 2;p 2 6;p 4 8;p 8 11;p 6 5;p 5 9;turn 6;team 0;o 1 0 r;o 2 0 r;go;team 1;o 0 1 r;o 3 1 r;go;a 2 0 2 8 e;a 1 0 13 7 w;a 3 1 8 13 n;a 0 1 7 2 s;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;p 9 2;p 2 6;p 4 8;p 8 11;p 6 5;p 5 9;turn 7;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;a 2 0 3 8 e;a 1 0 12 7 w;a 3 1 8 12 n;a 0 1 7 3 s;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;p 9 2;p 2 6;p 4 8;p 8 11;p 6 5;p 5 9;turn 8;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;a 2 0 4 8 e;a 1 0 11 7 w;a 3 1 8 11 n;a 0 1 7 4 s;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;p 9 2;p 2 6;p 6 5;p 5 9;p 8 10;p 5 8;turn 9;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;a 2 0 5 8 e;a 1 0 10 7 w;a 3 1 8 10 n;a 0 1 7 5 s;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;p 9 2;p 2 6;p 6 5;p 5 9;p 6 8;p 8 9;turn 10;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;a 2 0 6 8 e;a 1 0 9 7 w;a 3 1 8 9 n;a 0 1 7 6 s;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;p 9 2;p 2 6;p 6 5;p 5 9;p 8 8;p 7 8;turn 11;team 0;o 1 0 f;o 2 0 f;go;team 1;o 0 1 f;o 3 1 f;go;d 2 0 7 8 e;d 1 0 8 7 w;# bot 0 eliminated - defeated;d 3 1 8 8 n;d 0 1 7 7 s;# bot 1 eliminated - defeated;p 5 15;p 15 10;p 6 9;p 9 9;p 11 3;p 3 4;p 9 2;p 2 6;p 6 5;p 5 9;# stopping ai programs;";
+            var srcPath = "E:/Projects/DROD-AI-Challenge/bin/visualiser";
+		</script>
+		<script type="text/javascript" src="E:/Projects/DROD-AI-Challenge/bin/visualiser/scripts/tools.js" ></script>
+		<script type="text/javascript" src="E:/Projects/DROD-AI-Challenge/bin/visualiser/scripts/agent.js" ></script>
+		<script type="text/javascript" src="E:/Projects/DROD-AI-Challenge/bin/visualiser/scripts/gamestate.js" ></script>
+		<script type="text/javascript" src="E:/Projects/DROD-AI-Challenge/bin/visualiser/scripts/visualiser.js" ></script>
+		<script type="text/javascript" src="E:/Projects/DROD-AI-Challenge/bin/visualiser/scripts/main.js" ></script>
+	</head>
+	<body onresize="onResizeCanvas()">
+		<canvas id="canvas">
+			Sorry! This app requires a browser that supports HTML5 Canvas.
+		</canvas>
+	</body>
+</html>

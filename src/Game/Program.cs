@@ -10,7 +10,10 @@ namespace Game
 
         static void Main( string[] args )
         {
-            using ( myLogStream = new FileStream( "game.log", FileMode.Create, FileAccess.Write ) )
+            if ( args.Length < 3 )
+                return;
+
+            using ( myLogStream = new FileStream( args[ 1 ], FileMode.Create, FileAccess.Write ) )
             {
                 myLogWriter = new StreamWriter( myLogStream );
 
@@ -38,7 +41,7 @@ namespace Game
                     return;
                 }
 
-                if ( args.Length - 1 < GameState.TeamCount )
+                if ( args.Length - 2 < GameState.TeamCount )
                 {
                     LogComment( "Expected " + GameState.TeamCount + " competing programs" );
                     myLogWriter.Close();
@@ -52,7 +55,7 @@ namespace Game
                 {
                     try
                     {
-                        GameState.Teams[ i ].StartProgram( args[ i + 1 ] );
+                        GameState.Teams[ i ].StartProgram( args[ i + 2 ] );
                     }
                     catch
                     {

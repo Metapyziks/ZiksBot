@@ -33,9 +33,11 @@ namespace DumbBot
                 // If agent can move forward, do so
                 if ( agent.CanMove() )
                     agent.Order = Order.MoveForward;
-                // Otherwise, turn right
-                else
+                // Otherwise, turn randomly
+                else if( GameState.Random.NextDouble() < 0.5 )
                     agent.Order = Order.TurnRight;
+                else
+                    agent.Order = Order.TurnLeft;
             }
         }
     }

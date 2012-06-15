@@ -34,7 +34,7 @@ images.load = function( path )
 {
 	++images.myToLoadCount;
 	var img = new Image();
-	img.src = "images/" + path;
+	img.src = srcPath + "/images/" + path;
 
 	img.onload = images.onImageLoad;
 

@@ -7,6 +7,8 @@ function GameState()
 	images.load( "tile.png" );
 	images.load( "wall.png" );
 	
+	images.load( "package.png" );
+	
 	images.load( "shadtl.png" );
 	images.load( "shadct.png" );
 	images.load( "shadt.png" );
@@ -29,6 +31,7 @@ function GameState()
 	
 	this.tiles = new Array();
 	this.agents = new Array();
+	this.packages = new Array();
 	
 	this.getTile = function( x, y )
 	{
@@ -43,6 +46,15 @@ function GameState()
 		var lines = text.split( ";" );
 		var parseState = PSNone;
 		var curTurn = 0;
+		var self = this;
+	
+		var turnStart = function( turn )
+		{
+			parseState = PSTurn;
+			curTurn = turn;
+			self.turnCount = Math.max( curTurn + 1, self.turnCount );
+			self.packages.push( new Array() );
+		}
 		
 		for( var i = 0; i < lines.length; ++i )
 		{
@@ -70,9 +82,7 @@ function GameState()
 							parseState = PSMap;
 							break;
 						case "turn":
-							parseState = PSTurn;
-							curTurn = parseInt( args[ 1 ] );
-							this.turnCount = Math.max( curTurn + 1, this.turnCount );
+							turnStart( parseInt( args[ 1 ] ) );
 							break;
 					}
 					break;
@@ -101,8 +111,7 @@ function GameState()
 					switch( args[ 0 ] )
 					{
 						case "turn":
-							curTurn = parseInt( args[ 1 ] );
-							this.turnCount = Math.max( curTurn + 1, this.turnCount );
+							turnStart( parseInt( args[ 1 ] ) );
 							break;
 						case "a":
 						case "d":
@@ -123,6 +132,11 @@ function GameState()
 
 							if( args[ 0 ] == "d" )
 								this.agents[ id ].die( curTurn );
+							break;
+						case "p":
+							var x = parseInt( args[ 1 ] );
+							var y = parseInt( args[ 2 ] );
+							this.packages[ curTurn ].push( new Pos( x, y ) );
 							break;
 						case "o":
 							var id = parseInt( args[ 1 ] );
@@ -227,8 +241,19 @@ function GameState()
 		context.fillRect( rectX, rectY, width, height );
 		context.translate( -transX, -transY );
 		
+		var midX = left + 0.5 * width;
+		var midY = top + 0.5 * height;
+		
 		for( var i = 0; i < this.agents.length; ++i )
-			this.agents[ i ].render( context, this.turn, left + 0.5 * width, top + 0.5 * height, vX, vY );
+			this.agents[ i ].render( context, this.turn, midX, midY, vX, vY );
+			
+		for( var i = 0; i < this.packages[ this.turn ].length; ++i )
+		{
+			var pos = this.packages[ this.turn ][ i ];
+			var transX = midX + ( pos.x - vX ) * 16;
+			var transY = midY + ( pos.y - vY ) * 16;
+			context.drawImage( images.package, transX, transY );
+		}
 		
 		var innerLeft = 0.5 * ( width - this.width * 16 );
 		var innerTop = 0.5 * ( height - this.height * 16 );
