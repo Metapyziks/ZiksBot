@@ -36,6 +36,7 @@ namespace ViewGame
 		<script type=""text/javascript"" src=""$VPATH$scripts/tools.js"" ></script>
 		<script type=""text/javascript"" src=""$VPATH$scripts/agent.js"" ></script>
 		<script type=""text/javascript"" src=""$VPATH$scripts/gamestate.js"" ></script>
+		<script type=""text/javascript"" src=""$VPATH$scripts/controls.js"" ></script>
 		<script type=""text/javascript"" src=""$VPATH$scripts/visualiser.js"" ></script>
 		<script type=""text/javascript"" src=""$VPATH$scripts/main.js"" ></script>
 	</head>

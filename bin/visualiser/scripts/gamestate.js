@@ -2,6 +2,17 @@ var tile = new Object();
 tile.empty = 0;
 tile.wall  = 1;
 
+function Base( team, pos )
+{
+	this.team = team;
+	this.pos = pos;
+}
+
+function isNumber( n )
+{
+	return !isNaN( parseInt( n ) ) && isFinite( n );
+}
+
 function GameState()
 {
 	images.load( "tile.png" );
@@ -31,6 +42,7 @@ function GameState()
 	
 	this.tiles = new Array();
 	this.agents = new Array();
+	this.bases = new Array();
 	this.packages = new Array();
 	
 	this.getTile = function( x, y )
@@ -96,10 +108,18 @@ function GameState()
 					var row = new Array();
 					for( var j = 0; j < this.width; ++j )
 					{
-						if( line.charAt( j << 1 ) == '#' )
+						var c = line.charAt( j << 1 );
+						if( c == '#' )
 							row.push( tile.wall );
 						else
+						{
+							if( isNumber( c ) )
+							{
+								var team = parseInt( c );
+								this.bases.push( new Base( team, new Pos( j, this.tiles.length ) ) );
+							}
 							row.push( tile.empty );
+						}
 					}
 					this.tiles.push( row );
 					break;
@@ -214,6 +234,15 @@ function GameState()
 				}
 			}
 		}
+		
+		context.globalAlpha = 0.75;
+		for( var i = 0; i < this.bases.length; ++i )
+		{
+			var base = this.bases[ i ];
+			context.fillStyle = teamColours[ base.team ][ 0 ];
+			context.fillRect( base.pos.x * 16, base.pos.y * 16, 16, 16 );
+		}
+		context.globalAlpha = 1.0;
 	}
 	
 	this.render = function( context, left, top, width, height, vX, vY )
@@ -269,3 +298,5 @@ function GameState()
 		context.globalAlpha = 1.0;
 	}
 }
+
+var gameState = new GameState();

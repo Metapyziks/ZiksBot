@@ -122,6 +122,7 @@ function Agent( id, team, turn, x, y, dir )
 		
 		for( var i = 1; i < coords.length; ++i )
 			context.lineTo( coords[ i ][ 0 ], coords[ i ][ 1 ] );
+			
 		context.closePath();
 		context.fill();
 		context.translate( -transX, -transY );

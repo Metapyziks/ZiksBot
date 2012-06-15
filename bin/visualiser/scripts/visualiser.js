@@ -16,15 +16,15 @@ function Visualiser()
 	
 	this.viewWidth = 512;
 	this.viewHeight = 384;
-
-	this.gameState = new GameState();
+	
+	this.controls = new Controls();
 	
 	this.initialize = function()
 	{
 		this.canvas = document.getElementById( "canvas" );
 		this.context = this.canvas.getContext( "2d" );
 		
-		this.gameState.parse( gameLog );
+		gameState.parse( gameLog );
 		
 		this.onResizeCanvas();
 	}
@@ -71,9 +71,9 @@ function Visualiser()
 
 	this.keyDown = function( e )
 	{
-		++this.gameState.turn;
-		if( this.gameState.turn == this.gameState.turnCount )
-			this.gameState.turn = 0;
+		++gameState.turn;
+		if( gameState.turn == gameState.turnCount )
+			gameState.turn = 0;
 	}
 
 	this.keyUp = function( e )
@@ -89,14 +89,22 @@ function Visualiser()
 
 	this.render = function()
 	{
+		var m = 8;
+	
+		var viewX = Math.round( 0.5 * ( this.canvas.width - this.viewWidth ) );
+		var viewY = Math.round( 0.5 * ( this.canvas.height - ( this.viewHeight + m + 64 ) ) );
+		
 		this.context.fillStyle = "#141414";
 		this.context.fillRect( 0, 0, this.canvas.width, this.canvas.height );
+	
+		this.context.fillStyle = "#000000";
+		this.context.fillRect( viewX - m, viewY - m, this.viewWidth + m * 2, this.viewHeight + 64 + m * 3 );
 		
-		this.gameState.render( this.context,
-			Math.round( 0.5 * ( this.canvas.width - this.viewWidth ) ),
-			Math.round( 0.5 * ( this.canvas.height - this.viewHeight ) ),
+		gameState.render( this.context, viewX, viewY,
 			this.viewWidth, this.viewHeight, this.viewX, this.viewY
 		);
+		
+		this.controls.render( this.context, viewX, viewY + m + this.viewHeight, this.viewWidth, 64 );
 	}
 
 	this.run = function()
