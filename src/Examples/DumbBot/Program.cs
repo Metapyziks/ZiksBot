@@ -120,8 +120,7 @@ namespace DumbBot
                                     case "d": // Dead agent position and rotation
                                         team = int.Parse( split[ 1 ] );
                                         pos = new Position( int.Parse( split[ 2 ] ), int.Parse( split[ 3 ] ) );
-                                        dir = Direction.Parse( split[ 4 ] );
-                                        GameState.Dead[ team ].Add( new Agent( team, pos, dir ) );
+                                        GameState.Dead[ team ].Add( new Agent( team, pos, Direction.None ) );
                                         break;
                                     case "b": // Base position
                                         team = int.Parse( split[ 1 ] );

@@ -160,8 +160,15 @@ namespace Game
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
-            while ( timer.ElapsedMilliseconds <= GameState.Timeout )
+            while ( true )
             {
+                if ( timer.ElapsedMilliseconds > GameState.Timeout )
+                {
+                    Program.LogComment( "=== timeout ===" );
+                    Eliminated = true;
+                    return;
+                }
+
                 if ( HasError )
                 {
                     Program.LogComment( "=== error ===" );

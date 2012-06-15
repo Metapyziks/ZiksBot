@@ -13,13 +13,13 @@ namespace Game
             if ( args.Length < 3 )
                 return;
 
-            using ( myLogStream = new FileStream( args[ 1 ], FileMode.Create, FileAccess.Write ) )
+            using ( myLogStream = new FileStream( args[ 0 ], FileMode.Create, FileAccess.Write ) )
             {
                 myLogWriter = new StreamWriter( myLogStream );
 
                 GameState.Timeout = 1000;
                 GameState.TurnLimit = 500;
-                GameState.Seed = (int) DateTime.UtcNow.ToBinary();
+                GameState.Seed = 229644535; // (int) DateTime.UtcNow.ToBinary();
                 GameState.Random = new Random( GameState.Seed );
                 GameState.FogOfWar = true;
                 GameState.ViewRange = 5.0f;
@@ -34,9 +34,9 @@ namespace Game
 
                 LogComment( "loading map" );
 
-                if ( !GameState.LoadMap( args[ 0 ] ) )
+                if ( !GameState.LoadMap( args[ 1 ] ) )
                 {
-                    LogComment( "Error while loading map " + args[ 0 ] );
+                    LogComment( "Error while loading map " + args[ 1 ] );
                     myLogWriter.Close();
                     return;
                 }
