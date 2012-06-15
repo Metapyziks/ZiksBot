@@ -1,8 +1,5 @@
 function Visualiser()
 {
-	images.load( "tile.png" );
-	images.load( "wall.png" );
-
 	var myDragging = false;
 	
 	var myDragX = 0;
@@ -74,7 +71,9 @@ function Visualiser()
 
 	this.keyDown = function( e )
 	{
-	
+		++this.gameState.turn;
+		if( this.gameState.turn == this.gameState.turnCount )
+			this.gameState.turn = 0;
 	}
 
 	this.keyUp = function( e )
