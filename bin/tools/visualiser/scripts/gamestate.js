@@ -112,17 +112,20 @@ function GameState()
 	
 	this.render = function( context, left, top, width, height, vX, vY )
 	{
+		vX = Math.round( vX * 8 ) / 8;
+		vY = Math.round( vY * 8 ) / 8;
+	
 		if( myMapPattern == null )
 			myMapPattern = context.createPattern( myMapImage, "repeat" )
 		
 		var rectX = vX * 16 - 0.5 * width;
 		var rectY = vY * 16 - 0.5 * height;
 		
-		if( rectX < 0 )
-			rectX += this.width * 16;
+		// if( rectX < 0 )
+		//     rectX += this.width * 16;
 			
-		if( rectY < 0 )
-			rectY += this.height * 16;
+		// if( rectY < 0 )
+		// 	   rectY += this.height * 16;
 		
 		var transX = left - rectX;
 		var transY = top  - rectY;
