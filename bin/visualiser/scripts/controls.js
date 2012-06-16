@@ -18,9 +18,9 @@ function Button( image, x, y, action )
 	{
 		context.drawImage( this.image, this.x + sX, this.y + sY );
 		
-		if( !this.highlight )
+		if( this.highlight )
 		{
-			context.fillStyle = "#000000";
+			context.fillStyle = "#ffffff";
 			context.globalAlpha = 0.33;
 			context.fillRect( this.x + sX, this.y + sY, this.image.width, this.image.height );
 			context.globalAlpha = 1.0;
@@ -116,7 +116,7 @@ function Controls()
 		while( space * sMul < 4 )
 			space *= 2;
 			
-		context.fillStyle = "#000000";
+		context.fillStyle = "#ffffff";
 		context.globalAlpha = 0.1;
 		for( var i = 0; i < gameState.turnCount; i += 2 * space )
 		{
@@ -126,5 +126,17 @@ function Controls()
 		
 		for( var i = 0; i < this.buttons.length; ++i )
 			this.buttons[ i ].render( context, x, y );
+		
+		var lastBtn = this.buttons[ this.buttons.length - 1 ];
+		var textX = lastBtn.x + lastBtn.image.width + 8;
+		var textW = width - textX;
+		
+		context.fillStyle = "#aed771";
+		context.fillRect( x + textX, y + 24, textW, 40 );
+		context.fillStyle = "#78a930";
+		context.font = "bold 32px sans-serif";
+		context.textAlign = "center"
+		context.fillText( "" + ( gameState.turn + 1 ) + "/" + gameState.turnCount,
+			x + textX + textW / 2, y + 56, textW );
 	}
 }
