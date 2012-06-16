@@ -35,23 +35,9 @@ function Controls()
 	
 	var mySeeking = false;
 	
-	var pause = function()
-	{
-		if( myPlaying )
-		{
-			myPlaying = false;
-			clearInterval( myPlayID );
-		}
-	}
-	
 	this.width = 0;
-
-	this.btnPrev = new Button( images.load( "btnprev.png" ), 0, 24, function()
-	{
-		pause();
-		gameState.prevTurn();
-	} );
-	this.btnPlay = new Button( images.load( "btnplay.png" ), 48, 24, function()
+	
+	this.play = function()
 	{
 		if( !myPlaying )
 		{
@@ -62,19 +48,40 @@ function Controls()
 					gameState.nextTurn();
 			}, 1000.0 / 8.0 );
 		}
+	}
+	
+	this.pause = function()
+	{
+		if( myPlaying )
+		{
+			myPlaying = false;
+			clearInterval( myPlayID );
+		}
+	}
+	
+	var self = this;
+
+	this.btnPrev = new Button( images.load( "btnprev.png" ), 0, 24, function()
+	{
+		self.pause();
+		gameState.prevTurn();
+	} );
+	this.btnPlay = new Button( images.load( "btnplay.png" ), 48, 24, function()
+	{
+		self.play();
 	} );
 	this.btnPause = new Button( images.load( "btnpause.png" ), 96, 24, function()
 	{
-		pause();
+		self.pause();
 	} );
 	this.btnStop = new Button( images.load( "btnstop.png" ), 144, 24, function()
 	{
-		pause();
+		self.pause();
 		gameState.turn = 0;
 	} );
 	this.btnNext = new Button( images.load( "btnnext.png" ), 192, 24, function()
 	{
-		pause();
+		self.pause();
 		gameState.nextTurn();
 	} );
 

@@ -37,6 +37,8 @@ function Visualiser()
 		this.mapY = gameState.height / 2.0;
 		
 		this.onResizeCanvas();
+		
+		this.controls.play();
 	}
 
 	this.mouseMove = function( x, y )
