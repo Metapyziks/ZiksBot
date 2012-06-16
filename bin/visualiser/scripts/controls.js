@@ -165,7 +165,8 @@ function Controls()
 		context.globalAlpha = 0.1;
 		for( var i = 0; i < gameState.turnCount; i += 2 * space )
 		{
-			context.fillRect( x + i * sMul, y, space * sMul, 16 );
+			var wid = Math.min( space * sMul, width - i * sMul );
+			context.fillRect( x + i * sMul, y, wid, 16 );
 		}
 		context.globalAlpha = 1.0;
 		
