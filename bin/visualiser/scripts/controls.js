@@ -33,6 +33,8 @@ function Controls()
 	var myPlaying = false;
 	var myPlayID = -1;
 	
+	var mySeeking = false;
+	
 	var pause = function()
 	{
 		if( myPlaying )
@@ -41,6 +43,8 @@ function Controls()
 			clearInterval( myPlayID );
 		}
 	}
+	
+	this.width = 0;
 
 	this.btnPrev = new Button( images.load( "btnprev.png" ), 0, 24, function()
 	{
@@ -79,13 +83,44 @@ function Controls()
 		this.btnPrev, this.btnPlay, this.btnPause, this.btnStop, this.btnNext
 	];
 	
+	this.seek = function( x )
+	{
+		var ratio = x / this.width;
+		if( ratio < 0 )
+			ratio = 0;
+		else if( ratio > 1 )
+			ratio = 1;
+		gameState.turn = Math.round( ratio * ( gameState.turnCount - 1 ) );
+	}
+	
 	this.mouseMove = function( x, y )
 	{
-		for( var i = 0; i < this.buttons.length; ++i )
+		if( mySeeking )
 		{
-			var btn = this.buttons[ i ];
-			btn.highlight = btn.isIntersecting( x, y );
+			this.seek( x );
 		}
+		else
+		{
+			for( var i = 0; i < this.buttons.length; ++i )
+			{
+				var btn = this.buttons[ i ];
+				btn.highlight = btn.isIntersecting( x, y );
+			}
+		}
+	}
+	
+	this.mouseDown = function( x, y )
+	{
+		if( x >= 0 && x < this.width && y >= 0 && y < 16 )
+		{
+			mySeeking = true;
+			this.seek( x );
+		}
+	}
+	
+	this.mouseUp = function( x, y )
+	{
+		mySeeking = false;
 	}
 
 	this.click = function( x, y )
@@ -102,7 +137,9 @@ function Controls()
 	}
 	
 	this.render = function( context, x, y, width, height )
-	{	
+	{
+		this.width = width;
+	
 		context.fillStyle = "#aed771";
 		context.fillRect( x, y, width, 16 );
 		

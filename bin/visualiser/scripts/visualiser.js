@@ -68,8 +68,13 @@ function Visualiser()
 			y < this.viewY + this.viewHeight
 		);
 		
-		myDragX = x;
-		myDragY = y;
+		if( myDragging )
+		{
+			myDragX = x;
+			myDragY = y;
+		}
+		else
+			this.controls.mouseDown( x - this.viewX, y - this.controlY );
 	}
 
 	this.mouseUp = function( x, y )
@@ -78,6 +83,7 @@ function Visualiser()
 		this.mouseY = y;
 		
 		myDragging = false;
+		this.controls.mouseUp( x - this.viewX, y - this.controlY );
 	}
 
 	this.click = function( x, y )
