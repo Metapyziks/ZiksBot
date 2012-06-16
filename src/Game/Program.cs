@@ -199,9 +199,12 @@ namespace Game
 
                                 if ( agent != null )
                                 {
-                                    GameState.Packages.RemoveAt( i );
                                     newPos = agent.SpikePos;
-                                    canMove = true;
+                                    if ( GameState.Map[ newPos.X, newPos.Y ] == Tile.Empty )
+                                    {
+                                        GameState.Packages.RemoveAt( i );
+                                        canMove = true;
+                                    }
                                 }
                             }
 

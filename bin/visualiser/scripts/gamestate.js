@@ -256,12 +256,6 @@ function GameState()
 		var rectX = vX * 16 - 0.5 * width;
 		var rectY = vY * 16 - 0.5 * height;
 		
-		// if( rectX < 0 )
-		//     rectX += this.width * 16;
-			
-		// if( rectY < 0 )
-		// 	   rectY += this.height * 16;
-		
 		var transX = left - rectX;
 		var transY = top  - rectY;
 		

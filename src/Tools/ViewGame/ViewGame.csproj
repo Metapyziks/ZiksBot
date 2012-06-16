@@ -55,7 +55,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(TargetDir)"
-Game "game.log" "maps\test.map" "examples/csharp/DumbBot.exe" "examples/csharp/DumbBot.exe"</PreBuildEvent>
+Game "game.log" "maps\test.map" "examples/csharp/DumbBot.exe" "examples/csharp/DumbBot.exe" "examples/csharp/DumbBot.exe" "examples/csharp/DumbBot.exe"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>
