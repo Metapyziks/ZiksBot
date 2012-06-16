@@ -1,9 +1,18 @@
-function Button( image, x, y )
+function Button( image, x, y, action )
 {
 	this.image = image;
 	this.x = x;
 	this.y = y;
+	this.action = action;
+	
 	this.highlight = false;
+	
+	this.isIntersecting = function( sX, sY )
+	{
+		return sX >= this.x && sY >= this.y &&
+			sX < this.x + this.image.width &&
+			sY < this.y + this.image.height;
+	}
 	
 	this.render = function( context, sX, sY )
 	{
@@ -21,21 +30,79 @@ function Button( image, x, y )
 
 function Controls()
 {
-	this.btnPrev = new Button( images.load( "btnprev.png" ), 0, 24 );
-	this.btnPlay = new Button( images.load( "btnplay.png" ), 48, 24 );
-	this.btnPause = new Button( images.load( "btnpause.png" ), 96, 24 );
-	this.btnStop = new Button( images.load( "btnstop.png" ), 144, 24 );
-	this.btnNext = new Button( images.load( "btnnext.png" ), 192, 24 );
+	var myPlaying = false;
+	var myPlayID = -1;
+	
+	var pause = function()
+	{
+		if( myPlaying )
+		{
+			myPlaying = false;
+			clearInterval( myPlayID );
+		}
+	}
+
+	this.btnPrev = new Button( images.load( "btnprev.png" ), 0, 24, function()
+	{
+		pause();
+		gameState.prevTurn();
+	} );
+	this.btnPlay = new Button( images.load( "btnplay.png" ), 48, 24, function()
+	{
+		if( !myPlaying )
+		{
+			myPlaying = true;
+			myPlayID = setInterval( function()
+			{
+				if( myPlaying )
+					gameState.nextTurn();
+			}, 1000.0 / 8.0 );
+		}
+	} );
+	this.btnPause = new Button( images.load( "btnpause.png" ), 96, 24, function()
+	{
+		pause();
+	} );
+	this.btnStop = new Button( images.load( "btnstop.png" ), 144, 24, function()
+	{
+		pause();
+		gameState.turn = 0;
+	} );
+	this.btnNext = new Button( images.load( "btnnext.png" ), 192, 24, function()
+	{
+		pause();
+		gameState.nextTurn();
+	} );
 
 	this.buttons =
 	[
 		this.btnPrev, this.btnPlay, this.btnPause, this.btnStop, this.btnNext
 	];
 	
-	this.btnPlay.highlight = true;
+	this.mouseMove = function( x, y )
+	{
+		for( var i = 0; i < this.buttons.length; ++i )
+		{
+			var btn = this.buttons[ i ];
+			btn.highlight = btn.isIntersecting( x, y );
+		}
+	}
+
+	this.click = function( x, y )
+	{
+		for( var i = 0; i < this.buttons.length; ++i )
+		{
+			var btn = this.buttons[ i ];
+			if( btn.isIntersecting( x, y ) )
+			{
+				btn.action();
+				break;
+			}
+		}
+	}
 	
 	this.render = function( context, x, y, width, height )
-	{
+	{	
 		context.fillStyle = "#aed771";
 		context.fillRect( x, y, width, 16 );
 		

@@ -45,6 +45,18 @@ function GameState()
 	this.bases = new Array();
 	this.packages = new Array();
 	
+	this.prevTurn = function()
+	{
+		--this.turn;
+		this.turn -= Math.floor( this.turn / this.turnCount ) * this.turnCount;
+	}
+	
+	this.nextTurn = function()
+	{
+		++this.turn;
+		this.turn -= Math.floor( this.turn / this.turnCount ) * this.turnCount;
+	}
+	
 	this.getTile = function( x, y )
 	{
 		x -= Math.floor( x / this.width ) * this.width;

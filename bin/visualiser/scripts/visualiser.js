@@ -5,14 +5,21 @@ function Visualiser()
 	var myDragX = 0;
 	var myDragY = 0;
 	
+	var m = 8;
+	
 	this.canvas = null;
 	this.context = null;
 
 	this.mouseX = 0;
 	this.mouseY = 0;
 	
+	this.mapX = 0;
+	this.mapY = 0;
+	
 	this.viewX = 0;
 	this.viewY = 0;
+	
+	this.controlY = 0;
 	
 	this.viewWidth = 512;
 	this.viewHeight = 384;
@@ -26,8 +33,8 @@ function Visualiser()
 		
 		gameState.parse( gameLog );
 		
-		this.viewX = gameState.width / 2.0;
-		this.viewY = gameState.height / 2.0;
+		this.mapX = gameState.width / 2.0;
+		this.mapY = gameState.height / 2.0;
 		
 		this.onResizeCanvas();
 	}
@@ -39,20 +46,27 @@ function Visualiser()
 		
 		if( myDragging )
 		{
-			this.viewX += ( myDragX - x ) / 16;
-			this.viewY += ( myDragY - y ) / 16;
+			this.mapX += ( myDragX - x ) / 16;
+			this.mapY += ( myDragY - y ) / 16;
 		
 			myDragX = x;
 			myDragY = y;
 		}
+		else
+			this.controls.mouseMove( x - this.viewX, y - this.controlY );
 	}
 
 	this.mouseDown = function( x, y )
-	{
+	{	
 		this.mouseX = x;
 		this.mouseY = y;
 		
-		myDragging = true;
+		myDragging |= (
+			x >= this.viewX &&
+			y >= this.viewY &&
+			x < this.viewX + this.viewWidth &&
+			y < this.viewY + this.viewHeight
+		);
 		
 		myDragX = x;
 		myDragY = y;
@@ -70,13 +84,14 @@ function Visualiser()
 	{
 		this.mouseX = x;
 		this.mouseY = y;
+		
+		if( !myDragging )
+			this.controls.click( x - this.viewX, y - this.controlY );
 	}
 
 	this.keyDown = function( e )
 	{
-		++gameState.turn;
-		if( gameState.turn == gameState.turnCount )
-			gameState.turn = 0;
+		
 	}
 
 	this.keyUp = function( e )
@@ -88,26 +103,25 @@ function Visualiser()
 	{
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
+		
+		this.viewX = Math.round( 0.5 * ( this.canvas.width - this.viewWidth ) );
+		this.viewY = Math.round( 0.5 * ( this.canvas.height - ( this.viewHeight + m + 64 ) ) );
+		
+		this.controlY = this.viewY + m + this.viewHeight;
 	}
 
 	this.render = function()
-	{
-		var m = 8;
-	
-		var viewX = Math.round( 0.5 * ( this.canvas.width - this.viewWidth ) );
-		var viewY = Math.round( 0.5 * ( this.canvas.height - ( this.viewHeight + m + 64 ) ) );
-		
+	{		
 		this.context.fillStyle = "#141414";
 		this.context.fillRect( 0, 0, this.canvas.width, this.canvas.height );
 	
 		this.context.fillStyle = "#000000";
-		this.context.fillRect( viewX - m, viewY - m, this.viewWidth + m * 2, this.viewHeight + 64 + m * 3 );
+		this.context.fillRect( this.viewX - m, this.viewY - m, this.viewWidth + m * 2, this.viewHeight + 64 + m * 3 );
 		
-		gameState.render( this.context, viewX, viewY,
-			this.viewWidth, this.viewHeight, this.viewX, this.viewY
-		);
+		gameState.render( this.context, this.viewX, this.viewY,
+			this.viewWidth, this.viewHeight, this.mapX, this.mapY );
 		
-		this.controls.render( this.context, viewX, viewY + m + this.viewHeight, this.viewWidth, 64 );
+		this.controls.render( this.context, this.viewX, this.controlY, this.viewWidth, 64 );
 	}
 
 	this.run = function()
@@ -119,8 +133,8 @@ function Visualiser()
 	{
 		if( !myDragging )
 		{
-			self.viewX += ( Math.round( self.viewX ) - self.viewX ) * 0.25;
-			self.viewY += ( Math.round( self.viewY ) - self.viewY ) * 0.25;
+			self.mapX += ( Math.round( self.mapX ) - self.mapX ) * 0.25;
+			self.mapY += ( Math.round( self.mapY ) - self.mapY ) * 0.25;
 		}
 	
 		self.render();
