@@ -36,7 +36,7 @@ namespace DumbBot
         {
             Map = new Tile[ MapWidth, MapHeight ];
 
-            if( GameState.Random == null )
+            //if( GameState.Random == null )
                 GameState.Random = new Random();
 
             Agents = new List<Agent>[ TeamCount ];

@@ -19,7 +19,7 @@ namespace Game
 
                 GameState.Timeout = 1000;
                 GameState.TurnLimit = 500;
-                GameState.Seed = 229644535; // (int) DateTime.UtcNow.ToBinary();
+                GameState.Seed = (int) DateTime.UtcNow.ToBinary();
                 GameState.Random = new Random( GameState.Seed );
                 GameState.FogOfWar = true;
                 GameState.ViewRange = 5.0f;
@@ -165,6 +165,8 @@ namespace Game
                         for( int i = GameState.Packages.Count - 1; i >= 0; --i )
                         {
                             Position pos = GameState.Packages[ i ];
+                            Position newPos = new Position();
+                            bool canMove = false;
                             Agent agent = agentGrid[ pos.X, pos.Y ];
                             if ( agent != null )
                             {
@@ -172,34 +174,64 @@ namespace Game
 
                                 if ( !agent.Dead )
                                 {
-                                    Position newPos = pos + agent.Direction;
-
-                                    if ( GameState.Map[ newPos.X, newPos.Y ] == Tile.Empty &&
-                                        !packageGrid[ newPos.X, newPos.Y ] &&
-                                        agentGrid[ newPos.X, newPos.Y ] == null )
+                                    newPos = agent.SpikePos;
+                                    canMove = true;
+                                }
+                            }
+                            else
+                            {
+                                foreach ( Direction dir in Direction.All )
+                                {
+                                    Position p = pos + dir;
+                                    Agent ag = agentGrid[ p.X, p.Y ];
+                                    if ( ag != null && ag.LastSpikePos.Equals( pos ) &&
+                                        !ag.SpikePos.Equals( ag.LastSpikePos ) )
                                     {
-                                        bool spawned = false;
-                                        foreach ( Team team in GameState.Teams )
+                                        if ( agent != null )
                                         {
-                                            foreach( Position bPos in team.Bases )
-                                            {
-                                                if ( bPos.Equals( newPos ) )
-                                                {
-                                                    spawned = true;
-                                                    Agent newAgent = new Agent( team, newPos, agent.Direction );
-                                                    team.Agents.Add( newAgent );
-                                                    ++liveCount;
-                                                    Log( "a", newAgent.ID, team.ID, newPos.X, newPos.Y, agent.Direction );
-                                                    break;
-                                                }
-                                            }
-                                            if ( spawned )
-                                                break;
+                                            agent = null;
+                                            break;
                                         }
 
-                                        if( !spawned )
-                                            GameState.Packages.Add( newPos );
+                                        agent = ag;
                                     }
+                                }
+
+                                if ( agent != null )
+                                {
+                                    GameState.Packages.RemoveAt( i );
+                                    newPos = agent.SpikePos;
+                                    canMove = true;
+                                }
+                            }
+
+                            if ( canMove )
+                            {
+                                if ( GameState.Map[ newPos.X, newPos.Y ] == Tile.Empty &&
+                                    !packageGrid[ newPos.X, newPos.Y ] &&
+                                    agentGrid[ newPos.X, newPos.Y ] == null )
+                                {
+                                    bool spawned = false;
+                                    foreach ( Team team in GameState.Teams )
+                                    {
+                                        foreach ( Position bPos in team.Bases )
+                                        {
+                                            if ( bPos.Equals( newPos ) )
+                                            {
+                                                spawned = true;
+                                                Agent newAgent = new Agent( team, newPos, agent.Direction );
+                                                team.Agents.Add( newAgent );
+                                                ++liveCount;
+                                                Log( "a", newAgent.ID, team.ID, newPos.X, newPos.Y, agent.Direction );
+                                                break;
+                                            }
+                                        }
+                                        if ( spawned )
+                                            break;
+                                    }
+
+                                    if ( !spawned )
+                                        GameState.Packages.Add( newPos );
                                 }
                             }
                         }

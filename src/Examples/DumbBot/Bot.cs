@@ -31,7 +31,7 @@ namespace DumbBot
             foreach ( Agent agent in Agents )
             {
                 // If agent can move forward, do so
-                if ( agent.CanMove() )
+                if ( agent.CanMove() && GameState.Random.NextDouble() < 0.9 )
                     agent.Order = Order.MoveForward;
                 // Otherwise, turn randomly
                 else if( GameState.Random.NextDouble() < 0.5 )

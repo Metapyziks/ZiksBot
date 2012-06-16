@@ -11,8 +11,8 @@ function Visualiser()
 	this.mouseX = 0;
 	this.mouseY = 0;
 	
-	this.viewX = 8;
-	this.viewY = 8;
+	this.viewX = 0;
+	this.viewY = 0;
 	
 	this.viewWidth = 512;
 	this.viewHeight = 384;
@@ -25,6 +25,9 @@ function Visualiser()
 		this.context = this.canvas.getContext( "2d" );
 		
 		gameState.parse( gameLog );
+		
+		this.viewX = gameState.width / 2.0;
+		this.viewY = gameState.height / 2.0;
 		
 		this.onResizeCanvas();
 	}

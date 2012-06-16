@@ -10,6 +10,11 @@ namespace Game
         public static readonly Direction West  = new Direction( -1, 0 );
         public static readonly Direction None  = new Direction( 0, 0 );
 
+        public static readonly Direction[] All = new Direction[]
+        {
+            North, East, South, West
+        };
+
         public static Direction Parse( String str )
         {
             switch ( str )

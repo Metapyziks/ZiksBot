@@ -10,6 +10,11 @@
         public Direction Direction { get; private set; }
         public Position Position { get; private set; }
 
+        public Position LastSpikePos { get; private set; }
+        public Position SpikePos
+        {
+            get { return Position + Direction; }
+        }
         public Order Order { get; set; }
 
         public bool Dead { get; set; }
@@ -29,6 +34,8 @@
 
         public void FinishTurn()
         {
+            LastSpikePos = SpikePos;
+
             switch ( Order )
             {
                 case Order.MoveForward:
