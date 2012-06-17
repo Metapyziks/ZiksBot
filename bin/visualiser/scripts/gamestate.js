@@ -260,6 +260,7 @@ function GameState()
 	this.render = function( context, left, top, width, height, vX, vY )
 	{
 		context.save();
+		
 		context.rect( left, top, width, height );
 		context.clip();
 	

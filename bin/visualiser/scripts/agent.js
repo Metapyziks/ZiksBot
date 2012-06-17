@@ -107,6 +107,8 @@ function Agent( id, team, turn, x, y, dir )
 		var transX = sX + ( pos.x - vX + 0.5 ) * 16;
 		var transY = sY + ( pos.y - vY + 0.5 ) * 16;
 		
+		context.save();
+		
 		context.translate( transX, transY );
 		
 		if( turn == this.deathTurn )
@@ -132,7 +134,7 @@ function Agent( id, team, turn, x, y, dir )
 			
 		context.closePath();
 		context.fill();
-		context.translate( -transX, -transY );
-		context.globalAlpha = 1.0;
+		
+		context.restore();
 	}
 }

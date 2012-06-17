@@ -217,6 +217,9 @@ namespace Game
                                     bool spawned = false;
                                     foreach ( Team team in GameState.Teams )
                                     {
+                                        if ( team.Eliminated )
+                                            continue;
+
                                         foreach ( Position bPos in team.Bases )
                                         {
                                             if ( bPos.Equals( newPos ) )
