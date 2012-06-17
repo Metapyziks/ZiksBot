@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{483EA4A9-D730-4B4C-8942-FF1E40C83DAC}</ProjectGuid>
+    <ProjectGuid>{75A6B6F5-8897-43DC-BA2A-B73B4BBBD778}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ViewGame</RootNamespace>
-    <AssemblyName>ViewGame</AssemblyName>
+    <RootNamespace>ZiksBot</RootNamespace>
+    <AssemblyName>ZiksBot</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,7 +28,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -43,28 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agent.cs" />
+    <Compile Include="Bot.cs" />
+    <Compile Include="Direction.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="Order.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Game\Game.csproj">
-      <Project>{D42C9793-651D-41A7-A942-3C990F987D59}</Project>
-      <Name>Game</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ZiksBot\ZiksBot.csproj">
-      <Project>{75A6B6F5-8897-43DC-BA2A-B73B4BBBD778}</Project>
-      <Name>ZiksBot</Name>
-    </ProjectReference>
+    <Compile Include="Tile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>cd "$(TargetDir)"
-Game "game.log" "maps\test.map" "ZiksBot.exe" "examples/csharp/DumbBot.exe" "examples/csharp/DumbBot.exe" "examples/csharp/DumbBot.exe"</PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

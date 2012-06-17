@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{67DF797F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewGame", "Tools\ViewGame\ViewGame.csproj", "{483EA4A9-D730-4B4C-8942-FF1E40C83DAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZiksBot", "ZiksBot\ZiksBot.csproj", "{75A6B6F5-8897-43DC-BA2A-B73B4BBBD778}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -29,6 +31,10 @@ Global
 		{483EA4A9-D730-4B4C-8942-FF1E40C83DAC}.Debug|x86.Build.0 = Debug|x86
 		{483EA4A9-D730-4B4C-8942-FF1E40C83DAC}.Release|x86.ActiveCfg = Release|x86
 		{483EA4A9-D730-4B4C-8942-FF1E40C83DAC}.Release|x86.Build.0 = Release|x86
+		{75A6B6F5-8897-43DC-BA2A-B73B4BBBD778}.Debug|x86.ActiveCfg = Debug|x86
+		{75A6B6F5-8897-43DC-BA2A-B73B4BBBD778}.Debug|x86.Build.0 = Debug|x86
+		{75A6B6F5-8897-43DC-BA2A-B73B4BBBD778}.Release|x86.ActiveCfg = Release|x86
+		{75A6B6F5-8897-43DC-BA2A-B73B4BBBD778}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
