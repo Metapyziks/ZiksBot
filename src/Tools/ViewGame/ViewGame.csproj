@@ -47,6 +47,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Examples\DumbBot\DumbBot.csproj">
+      <Project>{3AA5E268-FFBC-45E0-8786-B6BDA0D356FE}</Project>
+      <Name>DumbBot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Game\Game.csproj">
       <Project>{D42C9793-651D-41A7-A942-3C990F987D59}</Project>
       <Name>Game</Name>
