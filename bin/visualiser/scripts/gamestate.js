@@ -259,8 +259,12 @@ function GameState()
 	
 	this.render = function( context, left, top, width, height, vX, vY )
 	{
-		vX = Math.round( vX * 8 ) / 8;
-		vY = Math.round( vY * 8 ) / 8;
+		context.save();
+		context.rect( left, top, width, height );
+		context.clip();
+	
+		vX = Math.round( vX * 16 ) / 16;
+		vY = Math.round( vY * 16 ) / 16;
 	
 		if( myMapPattern == null )
 			myMapPattern = context.createPattern( myMapImage, "repeat" );
@@ -279,15 +283,51 @@ function GameState()
 		var midX = left + 0.5 * width;
 		var midY = top + 0.5 * height;
 		
+		var vL = vX - width / ( 16 * 2 );
+		var vR = vX + width / ( 16 * 2 );
+		var vT = vY - height / ( 16 * 2 );
+		var vB = vY + height / ( 16 * 2 );
+		
 		for( var i = 0; i < this.agents.length; ++i )
-			this.agents[ i ].render( context, this.turn, midX, midY, vX, vY );
+		{
+			var agent = this.agents[ i ];
 			
+			if( agent.isVisible( this.turn ) )
+			{
+				var pos = agent.getPosition( this.turn );
+			
+				var x0 = Math.ceil( ( vL - pos.x - 2 ) / this.width );
+				var x1 = Math.floor( ( vR - pos.x + 1 ) / this.width );
+				var y0 = Math.ceil( ( vT - pos.y - 2 ) / this.height );
+				var y1 = Math.floor( ( vB - pos.y + 1 ) / this.height );
+				
+				for( var x = x0; x <= x1; ++x )
+					for( var y = y0; y <= y1; ++y )
+						agent.render( context, this.turn, midX, midY,
+							vX - x * this.width, vY - y * this.height );
+			}
+		}
+		
 		for( var i = 0; i < this.packages[ this.turn ].length; ++i )
 		{
 			var pos = this.packages[ this.turn ][ i ];
+			
+			var x0 = Math.ceil( ( vL - pos.x - 2 ) / this.width );
+			var x1 = Math.floor( ( vR - pos.x + 1 ) / this.width );
+			var y0 = Math.ceil( ( vT - pos.y - 2 ) / this.height );
+			var y1 = Math.floor( ( vB - pos.y + 1 ) / this.height );
+			
 			var transX = midX + ( pos.x - vX ) * 16;
 			var transY = midY + ( pos.y - vY ) * 16;
-			context.drawImage( images.package, transX, transY );
+			
+			for( var x = x0; x <= x1; ++x )
+			{	for( var y = y0; y <= y1; ++y )
+				{
+					context.drawImage( images.package,
+						transX + x * this.width * 16,
+						transY + y * this.height * 16 );
+				}
+			}
 		}
 		
 		var innerLeft = 0.5 * ( width - this.width * 16 );
@@ -301,7 +341,8 @@ function GameState()
 		context.fillRect( left, top + innerTop, innerLeft, innerBottom - innerTop );
 		context.fillRect( left + innerRight, top + innerTop, width - innerRight, innerBottom - innerTop );
 		context.fillRect( left, top + innerBottom, width, height - innerBottom );
-		context.globalAlpha = 1.0;
+
+		context.restore();
 	}
 }
 

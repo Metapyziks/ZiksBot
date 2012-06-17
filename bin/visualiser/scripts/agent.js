@@ -89,11 +89,18 @@ function Agent( id, team, turn, x, y, dir )
 		this.deathTurn = turn;
 	}
 	
+	this.isVisible = function( turn )
+	{
+		return turn >= this.spawnTurn && ( this.deathTurn == -1 || turn <= this.deathTurn );
+	}
+	
+	this.getPosition = function( turn )
+	{
+		return this.positions[ turn - this.spawnTurn ];
+	}
+	
 	this.render = function( context, turn, sX, sY, vX, vY )
 	{
-		if( turn < this.spawnTurn || ( this.deathTurn != -1 && turn > this.deathTurn ) )
-			return;
-		
 		var pos = this.positions[ turn - this.spawnTurn ];
 		var dir = this.directions[ turn - this.spawnTurn ];
 		
